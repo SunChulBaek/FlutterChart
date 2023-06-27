@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'radar_data.dart';
 import 'radar_chart.dart';
 
 void main() {
@@ -48,20 +49,41 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'Radar Chart',
             ),
-            Container(
-              color: Colors.grey,
+            SizedBox(
               width: 200,
               height: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Container(
-                  color: Colors.yellow.withOpacity(0.3),
-                  width: 200,
-                  height: 200,
-                  child: RadarChart(
-                    lineWidth: 1,
-                    lineColor: Colors.white.withOpacity(0.8),
-                  ),
+              child: RadarChart(
+                bgColor: const Color(0xFFf0f0f0),
+                webLineWidth: 1,
+                webLineColor: Colors.grey.withOpacity(0.5),
+                markerSize: 2,
+                data: RadarData(
+                  List.of([
+                    RadarDataSet(
+                      color: Colors.red,
+                      fillColor: Colors.red.withOpacity(0.3),
+                      lineWidth: 1.2,
+                      entries: List.of([
+                        RadarEntry(70),
+                        RadarEntry(80),
+                        RadarEntry(90),
+                        RadarEntry(30),
+                        RadarEntry(50),
+                      ]
+                    )),
+                    RadarDataSet(
+                      color: Colors.blue,
+                      fillColor: Colors.blue.withOpacity(0.3),
+                      lineWidth: 1.2,
+                      entries: List.of([
+                        RadarEntry(30),
+                        RadarEntry(50),
+                        RadarEntry(70),
+                        RadarEntry(80),
+                        RadarEntry(90),
+                      ]
+                    )),
+                  ])
                 ),
               ),
             )
