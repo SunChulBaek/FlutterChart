@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 webLineWidth: 1,
                 webLineColor: Colors.grey.withOpacity(0.5),
                 markerSize: 2,
+                xLabels: List.of(["김환용", "이우경", "서기웅", "김정현", "박종현"]),
                 data: RadarData(
                   List.of([
                     RadarDataSet(
@@ -81,6 +82,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         RadarEntry(70),
                         RadarEntry(80),
                         RadarEntry(90),
+                      ]
+                    )),
+                    RadarDataSet(
+                      color: Colors.yellow,
+                      fillColor: Colors.yellow.withOpacity(0.3),
+                      lineWidth: 1.2,
+                      entries: List.of([
+                        RadarEntry(50),
+                        RadarEntry(70),
+                        RadarEntry(80),
+                        RadarEntry(90),
+                        RadarEntry(70),
                       ]
                     )),
                   ])

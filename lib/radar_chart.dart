@@ -12,6 +12,9 @@ class RadarChart extends StatefulWidget {
     this.webLineColor = Colors.black,
     this.markerSize = 2.0,
     this.axisMaximum = 100.0,
+    this.xLabels,
+    this.xLabelColor = Colors.black,
+    this.xLabelSize = 10,
     required this.data,
     super.key
   });
@@ -21,6 +24,9 @@ class RadarChart extends StatefulWidget {
   final Color webLineColor;
   final double markerSize;
   final double axisMaximum;
+  final List<String>? xLabels;
+  final Color xLabelColor;
+  final double xLabelSize;
   final RadarData data;
 
   @override
@@ -37,6 +43,9 @@ class _RadarChartState extends State<RadarChart> {
         webLineColor: widget.webLineColor,
         markerSize: widget.markerSize,
         axisMaximum: widget.axisMaximum,
+        xLabels: widget.xLabels,
+        xLabelColor: widget.xLabelColor,
+        xLabelSize: widget.xLabelSize,
         data: widget.data,
       ),
     );
@@ -52,6 +61,9 @@ class _RadarChartCustomPaint extends CustomPainter {
     required this.webLineColor,
     required this.markerSize,
     required this.axisMaximum,
+    required this.xLabels,
+    required this.xLabelColor,
+    required this.xLabelSize,
     required this.data,
   });
 
@@ -60,6 +72,9 @@ class _RadarChartCustomPaint extends CustomPainter {
   final Color webLineColor;
   final double markerSize;
   final double axisMaximum;
+  final List<String>? xLabels;
+  final Color xLabelColor;
+  final double xLabelSize;
   final RadarData data;
 
   @override
@@ -80,6 +95,9 @@ class _RadarChartCustomPaint extends CustomPainter {
 
     // 데이터
     drawData(canvas, axisCount, radius, center);
+
+    // x축 라벨
+    drawXLabels(canvas, axisCount, radius, center);
   }
 
   @override
@@ -121,6 +139,34 @@ class _RadarChartCustomPaint extends CustomPainter {
         Paint()
           ..strokeWidth = webLineWidth
           ..color = webLineColor
+      );
+    }
+  }
+
+  void drawXLabels(Canvas canvas, int axisCount, double radius, Offset center) {
+    for (var i = 0; i < (xLabels?.length ?? 0); i++) {
+      final startAngle = _offsetAngle - 360 / axisCount * i;
+      final x1 = center.dx + radius * cosDeg(startAngle);
+      final y1 = center.dy - radius * sinDeg(startAngle);
+
+      final textPainter = TextPainter()
+        ..text = TextSpan(
+          text: xLabels![i],
+          style: TextStyle(
+            color: xLabelColor,
+            fontSize: xLabelSize
+          )
+        )
+        ..textDirection = TextDirection.ltr
+        ..textAlign = TextAlign.center
+        ..layout();
+
+      textPainter.paint(
+        canvas,
+        Offset(
+          x1 - textPainter.width / 2,
+          y1 - textPainter.height / 2
+        )
       );
     }
   }
