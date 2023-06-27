@@ -11,10 +11,13 @@ class RadarChart extends StatefulWidget {
     this.webLineWidth = 0.0,
     this.webLineColor = Colors.black,
     this.markerSize = 2.0,
-    this.axisMaximum = 100.0,
     this.xLabels,
     this.xLabelColor = Colors.black,
     this.xLabelSize = 10,
+    this.yMaximum = 100.0,
+    this.yLabelColor = Colors.black,
+    this.yLabelSize = 10,
+    this.yDrawLabels = false,
     required this.data,
     super.key
   });
@@ -23,10 +26,13 @@ class RadarChart extends StatefulWidget {
   final double webLineWidth;
   final Color webLineColor;
   final double markerSize;
-  final double axisMaximum;
   final List<String>? xLabels;
   final Color xLabelColor;
   final double xLabelSize;
+  final double yMaximum;
+  final Color yLabelColor;
+  final double yLabelSize;
+  final bool yDrawLabels;
   final RadarData data;
 
   @override
@@ -42,10 +48,13 @@ class _RadarChartState extends State<RadarChart> {
         webLineWidth: widget.webLineWidth,
         webLineColor: widget.webLineColor,
         markerSize: widget.markerSize,
-        axisMaximum: widget.axisMaximum,
         xLabels: widget.xLabels,
         xLabelColor: widget.xLabelColor,
         xLabelSize: widget.xLabelSize,
+        yMaximum: widget.yMaximum,
+        yLabelColor: widget.yLabelColor,
+        yLabelSize: widget.yLabelSize,
+        yDrawLabels: widget.yDrawLabels,
         data: widget.data,
       ),
     );
@@ -60,10 +69,13 @@ class _RadarChartCustomPaint extends CustomPainter {
     required this.webLineWidth,
     required this.webLineColor,
     required this.markerSize,
-    required this.axisMaximum,
     required this.xLabels,
     required this.xLabelColor,
     required this.xLabelSize,
+    required this.yMaximum,
+    required this.yLabelColor,
+    required this.yLabelSize,
+    required this.yDrawLabels,
     required this.data,
   });
 
@@ -71,10 +83,13 @@ class _RadarChartCustomPaint extends CustomPainter {
   final double webLineWidth;
   final Color webLineColor;
   final double markerSize;
-  final double axisMaximum;
   final List<String>? xLabels;
   final Color xLabelColor;
   final double xLabelSize;
+  final double yMaximum;
+  final Color yLabelColor;
+  final double yLabelSize;
+  final bool yDrawLabels;
   final RadarData data;
 
   @override
@@ -98,6 +113,9 @@ class _RadarChartCustomPaint extends CustomPainter {
 
     // x축 라벨
     drawXLabels(canvas, axisCount, radius, center);
+
+    // y축 라벨
+    drawYLabels(canvas, guideLineCount, axisCount, radius, center);
   }
 
   @override
@@ -171,6 +189,36 @@ class _RadarChartCustomPaint extends CustomPainter {
     }
   }
 
+  void drawYLabels(Canvas canvas, int guideLineCount, int axisCount, double radius, Offset center) {
+    if (yDrawLabels) {
+      final x1 = center.dx + radius * cosDeg(_offsetAngle);
+      for (var i = 0; i <= guideLineCount; i++) {
+        final y1 = center.dy - radius / guideLineCount * (guideLineCount - i) *
+            sinDeg(_offsetAngle);
+        final textPainter = TextPainter()
+          ..text = TextSpan(
+              text: (yMaximum / guideLineCount * (guideLineCount - i))
+                  .toString(),
+              style: TextStyle(
+                  color: yLabelColor,
+                  fontSize: yLabelSize
+              )
+          )
+          ..textDirection = TextDirection.ltr
+          ..textAlign = TextAlign.center
+          ..layout();
+
+        textPainter.paint(
+            canvas,
+            Offset(
+                x1 - textPainter.width / 2,
+                y1 - textPainter.height / 2
+            )
+        );
+      }
+    }
+  }
+
   void drawData(Canvas canvas, int axisCount, double radius, Offset center) {
     for (var i = 0; i < data.dataSets.length; i++) {
       final entry = data.dataSets[i];
@@ -182,11 +230,11 @@ class _RadarChartCustomPaint extends CustomPainter {
         final endAngle = _offsetAngle - 360 / axisCount * (j + 1);
 
         // P1
-        final x1 = center.dx + (radius * v1 / axisMaximum) * cosDeg(startAngle);
-        final y1 = center.dy - (radius * v1 / axisMaximum) * sinDeg(startAngle);
+        final x1 = center.dx + (radius * v1 / yMaximum) * cosDeg(startAngle);
+        final y1 = center.dy - (radius * v1 / yMaximum) * sinDeg(startAngle);
         // P2
-        final x2 = center.dx + (radius * v2 / axisMaximum) * cosDeg(endAngle);
-        final y2 = center.dy - (radius * v2 / axisMaximum) * sinDeg(endAngle);
+        final x2 = center.dx + (radius * v2 / yMaximum) * cosDeg(endAngle);
+        final y2 = center.dy - (radius * v2 / yMaximum) * sinDeg(endAngle);
 
         canvas.drawLine(
           Offset(x1, y1),

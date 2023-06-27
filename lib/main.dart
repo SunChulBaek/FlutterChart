@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 webLineColor: Colors.grey.withOpacity(0.5),
                 markerSize: 2,
                 xLabels: List.of(["김환용", "이우경", "서기웅", "김정현", "박종현"]),
+                yDrawLabels: true,
                 data: RadarData(
                   List.of([
                     RadarDataSet(
