@@ -1,9 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-
-import 'model/radar_data.dart';
-import '../util/utils.dart';
+part of chart;
 
 class RadarChart extends StatefulWidget {
   const RadarChart({

@@ -1,4 +1,4 @@
-import 'dart:math';
+part of chart;
 
 num sinDeg(num degree) => sin(_degToRad(degree));
 

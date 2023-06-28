@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of chart;
 
 class RadarData {
   RadarData(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'ui/model/radar_data.dart';
-import 'ui/radar_chart.dart';
+import 'chart.dart';
 
 void main() {
   runApp(const MyApp());
