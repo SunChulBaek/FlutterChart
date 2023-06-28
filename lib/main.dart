@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'chart.dart';
+import 'package:ssun_chart/ssun_chart.dart';
 
 void main() {
   runApp(const MyApp());
