@@ -3,6 +3,7 @@ import 'package:flutter_chart/ui/main_bar_item.dart';
 
 import 'ui/main_item.dart';
 import 'ui/main_line_item.dart';
+import 'ui/main_pie_item.dart';
 import 'ui/main_radar_item.dart';
 import 'ui/main_title_item.dart';
 
@@ -45,6 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
     MainLineItem(),
     MainTitleItem('Bar Chart'),
     MainBarItem(),
+    MainTitleItem('Pie Chart'),
+    MainPieItem(),
   ]);
 
   @override
