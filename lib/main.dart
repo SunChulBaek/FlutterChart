@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart/ui/main_bar_item.dart';
 
 import 'ui/main_item.dart';
 import 'ui/main_line_item.dart';
@@ -41,7 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
     MainTitleItem('Radar Chart'),
     MainRadarItem(),
     MainTitleItem('Line Chart'),
-    MainLineItem()
+    MainLineItem(),
+    MainTitleItem('Bar Chart'),
+    MainBarItem(),
   ]);
 
   @override
