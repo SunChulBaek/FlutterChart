@@ -75,6 +75,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.0"
   js:
     dependency: transitive
     description:
@@ -140,10 +148,10 @@ packages:
     dependency: "direct main"
     description:
       name: ssun_chart
-      sha256: fd6b79e5db09c7fb8a3b271df83365b883daf3a618a2497c24f8b1f2644639da
+      sha256: "77b81ddd6edbaa6a63db146e6f4c6d85ab2fdb9aac3b6b14d0a4aa2cabef17e2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.5"
   stack_trace:
     dependency: transitive
     description:
