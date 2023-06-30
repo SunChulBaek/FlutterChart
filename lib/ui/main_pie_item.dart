@@ -11,12 +11,19 @@ class MainPieItem extends MainItem {
       bgColor: const Color(0xFFf0f0f0),
       data: PieData(
         List.of([
-          PieDataSet(entries: List.of([
-            PieEntry(14),
-            PieEntry(14),
-            PieEntry(34),
-            PieEntry(38)
-          ]))
+          PieDataSet(
+            colors: List.of([
+              Colors.red,
+              Colors.yellow,
+              Colors.green,
+              Colors.blue,
+            ]),
+            entries: List.of([
+              PieEntry(14),
+              PieEntry(14),
+              PieEntry(34),
+              PieEntry(38),
+            ]))
         ])
       ),
     ),

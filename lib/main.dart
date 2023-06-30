@@ -42,12 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<MainItem> _items = List.of([
     MainTitleItem('Radar Chart'),
     MainRadarItem(),
+    MainTitleItem('Pie Chart'),
+    MainPieItem(),
     MainTitleItem('Line Chart'),
     MainLineItem(),
     MainTitleItem('Bar Chart'),
     MainBarItem(),
-    MainTitleItem('Pie Chart'),
-    MainPieItem(),
   ]);
 
   @override
