@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/ui/main_item.dart';
 import 'package:ssun_chart/line_chart.dart';
+import 'package:ssun_chart/utils/value_formatter.dart';
 
 class MainLineItem extends MainItem {
   @override
@@ -10,6 +11,7 @@ class MainLineItem extends MainItem {
     child: LineChart(
       bgColor: const Color(0xFFf0f0f0),
       drawMarker: true,
+      yValueFormatter: DecimalFormatter(),
       data: LineData(
         List.of([
           LineDataSet(

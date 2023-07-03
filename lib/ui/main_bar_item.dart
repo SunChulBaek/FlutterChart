@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/ui/main_item.dart';
 import 'package:ssun_chart/bar_chart.dart';
+import 'package:ssun_chart/utils/value_formatter.dart';
 
 class MainBarItem extends MainItem {
   @override
@@ -9,6 +10,7 @@ class MainBarItem extends MainItem {
     height: 200,
     child: BarChart(
       bgColor: const Color(0xFFf0f0f0),
+      yValueFormatter: DecimalFormatter(),
       data: BarData(
         List.of([
           BarDataSet(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chart/ui/main_item.dart';
+import 'package:intl/intl.dart';
 import 'package:ssun_chart/radar_chart.dart';
+import 'package:ssun_chart/utils/value_formatter.dart';
 
 class MainRadarItem extends MainItem {
 
@@ -25,6 +27,7 @@ class MainRadarItem extends MainItem {
         "Party I",
       ]),
       yMaximum: 240,
+      yValueFormatter: DollarValueFormatter(),
       yDrawLabels: true,
       data: RadarData(
         List.of([
@@ -64,4 +67,9 @@ class MainRadarItem extends MainItem {
       ),
     ),
   );
+}
+
+class DollarValueFormatter extends ValueFormatter {
+  @override
+  String format(double value) => "${NumberFormat("#,##0").format(value)} \$";
 }
