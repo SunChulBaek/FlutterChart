@@ -148,10 +148,10 @@ packages:
     dependency: "direct main"
     description:
       name: ssun_chart
-      sha256: a380304dd4ce8fb09f565c2a4766974bc57e88cfd8b72db00eccd9be2f6f675b
+      sha256: "11f621cb6bead9d5eeba606ddcb1761635b52ed40bd288a83e5dc991999fd168"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.6"
+    version: "0.0.7"
   stack_trace:
     dependency: transitive
     description:
