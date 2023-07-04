@@ -33,5 +33,5 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: my-artifact
+          name: FlutterChart-${{ github.run_number }}
           path: build/app/outputs/flutter-apk/*.apk
