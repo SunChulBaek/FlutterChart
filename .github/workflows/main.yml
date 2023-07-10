@@ -3,7 +3,7 @@ name: Develop
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build:
@@ -40,4 +40,4 @@ jobs:
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          file_path: 'build/app/outputs/flutter-apk/FlutterChart-Dev-${{ github.run_number }}.apk'
+          file_path: 'build/app/outputs/flutter-apk/FlutterChart-${{ github.run_number }}.apk'
