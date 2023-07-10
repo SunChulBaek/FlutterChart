@@ -28,6 +28,14 @@ jobs:
           echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> android/keystore.properties
       - name: Build Binary
         run: flutter build apk --build-name=1.0.0 --build-number=${{ github.run_number }} --release
+      - name: Send Slack Message
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message # repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
       - name: Change File Name
         run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/FlutterChart-${{ github.run_number }}.apk
       - name: Upload Artifacts
