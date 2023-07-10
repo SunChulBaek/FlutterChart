@@ -29,7 +29,7 @@ jobs:
       - name: Build Binary
         run: flutter build apk --build-name=1.0.0 --build-number=${{ github.run_number }} --release
       - name: Change File Name
-        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/FlutterChart-${{ github.run_number }}.apk
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/FlutterChart-Dev-${{ github.run_number }}.apk
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
