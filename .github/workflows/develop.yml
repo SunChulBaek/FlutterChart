@@ -35,3 +35,9 @@ jobs:
         with:
           name: FlutterChart-${{ github.run_number }}
           path: build/app/outputs/flutter-apk/*.apk
+      - name: Slack Upload Artifacts
+        uses: MeilCli/slack-upload-file@v3
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          file_path: 'build/app/outputs/flutter-apk/FlutterChart-${{ github.run_number }}.apk'
