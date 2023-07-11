@@ -1,9 +1,31 @@
+# 정의 해야 할 것
+# secrets:
+#   APP_ID
+#   BASE64_KEYSTORE
+#   RELEASE_KEY_ALIAS
+#   RELEASE_KEY_PASSWORD
+#   RELEASE_STORE_PASSWORD
+#   SLACK_CHANNEL_ID
+#   SLACK_TOKEN
+#   SLACK_WEBHOOK_URL
+# vars:
+#   APP_NAME
+
 name: Develop
 
 on:
   push:
     branches:
       - develop
+
+env:
+  VERSION_CODE: ${{ github.run_number }}
+  VERSION_NAME: 1.0.0
+  FLUTTER_VERSION: 3.10.5
+  FLUTTER_CHANNEL: stable
+  APK_PATH: build/app/outputs/flutter-apk
+  KEYSTORE: keystore
+  KEYSTORE_PROPERTIES: android/keystore.properties
 
 jobs:
   build:
@@ -13,21 +35,31 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.5'
-          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
       - run: flutter --version
       - name: Install dependencies
         run: flutter pub get
       - name: Decode Keystore
-        run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > android/keystore
+        run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > android/${{ env.KEYSTORE }}
       - name: Create Keystore Properties
         run: |
-          echo "releaseKeyAlias=${{ secrets.RELEASE_KEY_ALIAS }}" > android/keystore.properties
-          echo "releaseKeyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}" >> android/keystore.properties
-          echo "releaseKeyStore=keystore" >> android/keystore.properties
-          echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> android/keystore.properties
+          echo "releaseKeyAlias=${{ secrets.RELEASE_KEY_ALIAS }}" > ${{ env.KEYSTORE_PROPERTIES }}
+          echo "releaseKeyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}" >> ${{ env.KEYSTORE_PROPERTIES }}
+          echo "releaseKeyStore=${{ env.KEYSTORE }}" >> ${{ env.KEYSTORE_PROPERTIES }}
+          echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> ${{ env.KEYSTORE_PROPERTIES }}
+      - name: Cache Gradle and wrapper
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Build Binary
-        run: flutter build apk --build-name=1.0.0 --build-number=${{ github.run_number }} --release
+        run: flutter build apk --build-name=${{ env.VERSION_NAME }} --build-number=${{ env.VERSION_CODE }} --release
       - name: Send Slack Message
         uses: 8398a7/action-slack@v3
         with:
@@ -37,15 +69,15 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
       - name: Change File Name
-        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/FlutterChart-Dev-${{ github.run_number }}.apk
+        run: mv ${{ env.APK_PATH }}/app-release.apk ${{ env.APK_PATH }}/${{ vars.APP_NAME }}-Dev-${{ env.VERSION_CODE }}.apk
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: FlutterChart-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/*.apk
+          name: ${{ vars.APP_NAME }}-${{ env.VERSION_CODE }}
+          path: ${{ env.APK_PATH }}/*.apk
       - name: Slack Upload Artifacts
         uses: MeilCli/slack-upload-file@v3
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          file_path: 'build/app/outputs/flutter-apk/FlutterChart-Dev-${{ github.run_number }}.apk'
+          file_path: '${{ env.APK_PATH }}/${{ vars.APP_NAME }}-Dev-${{ env.VERSION_CODE }}.apk'
