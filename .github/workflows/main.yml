@@ -9,7 +9,7 @@
 #   SLACK_TOKEN
 #   SLACK_WEBHOOK_URL
 # vars:
-#   APP_NAME
+#   APK_NAME
 
 name: Main
 
@@ -21,63 +21,33 @@ on:
 env:
   VERSION_CODE: ${{ github.run_number }}
   VERSION_NAME: 1.0.0
+  COMPILE_SDK: 33
+  MIN_SDK: 21
+  TARGET_SDK: 33
   FLUTTER_VERSION: 3.10.5
   FLUTTER_CHANNEL: stable
-  APK_PATH: build/app/outputs/flutter-apk
-  KEYSTORE: keystore
-  KEYSTORE_PROPERTIES: android/keystore.properties
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
+      - uses: SunChulBaek/build_flutter@v1
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: ${{ env.FLUTTER_CHANNEL }}
-          cache: true
-      - run: flutter --version
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Decode Keystore
-        run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > android/${{ env.KEYSTORE }}
-      - name: Create Keystore Properties
-        run: |
-          echo "releaseKeyAlias=${{ secrets.RELEASE_KEY_ALIAS }}" > ${{ env.KEYSTORE_PROPERTIES }}
-          echo "releaseKeyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}" >> ${{ env.KEYSTORE_PROPERTIES }}
-          echo "releaseKeyStore=${{ env.KEYSTORE }}" >> ${{ env.KEYSTORE_PROPERTIES }}
-          echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> ${{ env.KEYSTORE_PROPERTIES }}
-      - name: Cache Gradle and wrapper
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Build Binary
-        run: flutter build apk --build-name=${{ env.VERSION_NAME }} --build-number=${{ env.VERSION_CODE }} --release
-      - name: Send Slack Message
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,ref # repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
-      - name: Change File Name
-        run: mv ${{ env.APK_PATH }}/app-release.apk ${{ env.APK_PATH }}/${{ vars.APP_NAME }}-${{ env.VERSION_CODE }}.apk
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ vars.APP_NAME }}-${{ env.VERSION_CODE }}
-          path: ${{ env.APK_PATH }}/*.apk
-      - name: Slack Upload Artifacts
-        uses: MeilCli/slack-upload-file@v3
-        with:
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          file_path: '${{ env.APK_PATH }}/${{ vars.APP_NAME }}-${{ env.VERSION_CODE }}.apk'
+          base64-keystore: ${{ secrets.BASE64_KEYSTORE }}
+          keystore-location: "android/keystore"
+          keystore-properties: "android/keystore.properties"
+          release-key-alias: ${{ secrets.RELEASE_KEY_ALIAS }}
+          release-key-password: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          release-store-password: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          build-properties: "android/build.properties"
+          application-id: ${{ secrets.APP_ID }}
+          compile-sdk: ${{ env.COMPILE_SDK }}
+          min-sdk: ${{ env.MIN_SDK }}
+          target-sdk: ${{ env.TARGET_SDK }}
+          version-code: ${{ env.VERSION_CODE }}
+          version-name: ${{ env.VERSION_NAME }}
+          apk-name: "${{ vars.APK_NAME }}-${{ env.VERSION_CODE }}.apk"
+          slack-token: ${{ secrets.SLACK_TOKEN }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
