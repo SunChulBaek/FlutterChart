@@ -1,1 +1,1 @@
-# FlutterChart
+# FlutterChart ![Build Badge](https://github.com/SunChulBaek/FlutterChart/actions/workflows/main.yml/badge.svg)
